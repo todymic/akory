@@ -31,7 +31,7 @@ class Language
      * @ORM\ManyToMany(targetEntity=Practitioner::class, mappedBy="languages")
      *
      */
-    private ArrayCollection $practitioners;
+    private Collection $practitioners;
 
     public function __construct()
     {

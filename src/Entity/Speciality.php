@@ -28,7 +28,7 @@ class Speciality
      *     inverseJoinColumns={@ORM\JoinColumn(name="practitioner_id", referencedColumnName="id")}
      * )
      */
-    private ArrayCollection $practitioners;
+    private Collection $practitioners;
 
     /**
      * @ORM\OneToMany(targetEntity=Reason::class,
@@ -36,7 +36,7 @@ class Speciality
      *     orphanRemoval=true,
      *     cascade={"persist", "remove"})
      */
-    private ArrayCollection $reasons;
+    private Collection $reasons;
 
     /**
      * @ORM\Column(type="string", length=255)
