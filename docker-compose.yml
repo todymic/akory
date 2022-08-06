@@ -6,6 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - ./docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./docker/database/data:/var/lib/mysql
@@ -25,6 +27,8 @@ services:
     environment:
       APP_ENV: ${APP_ENV}
       APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: 'mysql://${DATABASE_USER}:${DATABASE_ROOT_PASSWORD}@db:3306/${DATABASE_NAME}?serverVersion=5.7'
+      SYMFONY_ENV: ${APP_ENV}
     networks:
       - app-akory
   phpmyadmin:
