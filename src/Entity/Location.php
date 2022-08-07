@@ -3,22 +3,28 @@
 namespace App\Entity;
 
 use App\Entity\User\Practitioner;
-use App\Repository\LocalityRepository;
+use App\Repository\LocationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
- * @ORM\Entity(repositoryClass=LocalityRepository::class)
+ * @ORM\Entity(repositoryClass=LocationRepository::class)
  */
-class Locality
+class Location
 {
-    /** 
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private ?int $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -51,10 +57,23 @@ class Locality
     private ?string $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Practitioner::class, inversedBy="localities")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity=Practitioner::class, inversedBy="locations")
+     * @ORM\JoinTable(name="practitioners_locations",
+     *      joinColumns={@ORM\JoinColumn(name="practitioner_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="location_id", referencedColumnName="id")}
+     *  )
      */
-    private ?Practitioner $practitioner;
+    private Collection $practitioners;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Availability::class, mappedBy="locations")
+     */
+    private Collection $availabilities;
+
+    public function __construct()
+    {
+        $this->practitioners = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -151,18 +170,44 @@ class Locality
         return $this;
     }
 
-    public function getPractitioner(): ?Practitioner
+    public function getName(): ?string
     {
-        return $this->practitioner;
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
-     * @return $this
+     * @return Collection<int, Practitioner>
      */
-    public function setPractitioner(?Practitioner $practitioner): self
+    public function getPractitioners(): Collection
     {
-        $this->practitioner = $practitioner;
+        return $this->practitioners;
+    }
+
+    public function addPractitioner(Practitioner $practitioner): self
+    {
+        if (!$this->practitioners->contains($practitioner)) {
+            $this->practitioners->add($practitioner);
+        }
 
         return $this;
+    }
+
+    public function removePractitioner(Practitioner $practitioner): self
+    {
+        $this->practitioners->removeElement($practitioner);
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }

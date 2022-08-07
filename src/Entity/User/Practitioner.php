@@ -5,9 +5,8 @@ namespace App\Entity\User;
 
 use App\Entity\Appointment;
 use App\Entity\Availability;
-use App\Entity\Degree;
 use App\Entity\Language;
-use App\Entity\Locality;
+use App\Entity\Location;
 use App\Entity\Speciality;
 use App\Entity\User;
 use App\Repository\PractitionerRepository;
@@ -65,15 +64,10 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
     private ?string $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=Locality::class,
-     *     mappedBy="practitioner",
-     *     orphanRemoval=true,
-     *     cascade={"persist", "remove"}
-     * )
+     * @ORM\ManyToMany(targetEntity=Location::class, mappedBy="practitioners")
+     *
      */
-    private Collection $localities;
-
-
+    private Collection $locations;
 
     /**
      * Practitioner constructor.
@@ -85,7 +79,7 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
         $this->specialities = new ArrayCollection();
         $this->appointments = new ArrayCollection();
         $this->availabilities = new ArrayCollection();
-        $this->localities = new ArrayCollection();
+        $this->locations = new ArrayCollection();
     }
 
     public function getId(): int
@@ -244,38 +238,30 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
     }
 
     /**
-     * @return Collection
+     * @return Collection<int, Location>
      */
-    public function getLocalities(): Collection
+    public function getLocations(): Collection
     {
-        return $this->localities;
+        return $this->locations;
     }
 
-    /**
-     * @return $this
-     */
-    public function addLocality(Locality $locality): self
+    public function addLocation(Location $location): self
     {
-        if (!$this->localities->contains($locality)) {
-            $this->localities[] = $locality;
-            $locality->setPractitioner($this);
+        if (!$this->locations->contains($location)) {
+            $this->locations->add($location);
+            $location->addPractitioner($this);
         }
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function removeLocality(Locality $locality): self
+    public function removeLocation(Location $location): self
     {
-        if ($this->localities->removeElement($locality)) {
-            // set the owning side to null (unless already changed)
-            if ($locality->getPractitioner() === $this) {
-                $locality->setPractitioner(null);
-            }
+        if ($this->locations->removeElement($location)) {
+            $location->removePractitioner($this);
         }
 
         return $this;
     }
+
 }

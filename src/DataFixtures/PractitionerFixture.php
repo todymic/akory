@@ -2,13 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Appointment;
 use App\Entity\Availability;
-use App\Entity\Degree;
 use App\Entity\Language;
-use App\Entity\Locality;
+use App\Entity\Location;
 use App\Entity\Speciality;
-use App\Entity\User\Patient;
 use App\Entity\User\Practitioner;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -41,21 +38,22 @@ class PractitionerFixture extends UserFixture implements DependentFixtureInterfa
         $speciality = $this->getReference(Speciality::class);
         $partitionner->addSpeciality($speciality);
 
-        $locality = new Locality();
-        $locality->setStreetType($fake->streetSuffix);
-        $locality->setStreetName($fake->streetName);
-        $locality->setStreetNumber($fake->randomDigit);
-        $locality->setCity($fake->city);
-        $locality->setCountry($fake->country);
-        $locality->setZipcode((int)$fake->postcode);
+        $location = new Location();
+        $location->setName("Clinique Avo");
+        $location->setStreetType($fake->streetSuffix);
+        $location->setStreetName($fake->streetName);
+        $location->setStreetNumber($fake->randomDigit);
+        $location->setCity($fake->city);
+        $location->setCountry($fake->country);
+        $location->setZipcode((int)$fake->postcode);
 
-        $partitionner->addLocality($locality);
+        $partitionner->addLocation($location);
 
         $availability = new Availability();
         $availability->setStatus(Availability::BUSY);
         $availability->setDay($fake->dateTimeBetween('now', '+1 month'));
         $availability->setHour($fake->dateTimeBetween('now', '+1 month'));
-        $availability->setLocality($locality);
+        $availability->setLocation($location);
 
         $partitionner->addAvailability($availability);
 

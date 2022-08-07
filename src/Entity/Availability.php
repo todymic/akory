@@ -48,10 +48,10 @@ class Availability
     private ?Appointment $appointment;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Locality::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Location::class, cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
-    private ?Locality $locality;
+    private ?Location $location;
 
     public function getId(): ?int
     {
@@ -138,17 +138,17 @@ class Availability
         return $this;
     }
 
-    public function getLocality(): ?Locality
+    public function getLocation(): ?Location
     {
-        return $this->locality;
+        return $this->location;
     }
 
     /**
      * @return $this
      */
-    public function setLocality(?Locality $locality): self
+    public function setLocation(?Location $location): self
     {
-        $this->locality = $locality;
+        $this->location = $location;
 
         return $this;
     }

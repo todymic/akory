@@ -4,9 +4,8 @@ namespace App\Tests\Unit\Entity;
 
 use App\Entity\Appointment;
 use App\Entity\Availability;
-use App\Entity\Degree;
 use App\Entity\Language;
-use App\Entity\Locality;
+use App\Entity\location;
 use App\Entity\Speciality;
 use App\Entity\User\Practitioner;
 use App\Tests\DatabaseToolTrait;
@@ -53,22 +52,10 @@ class PractitionerTest extends KernelTestCase
         $this->assertInstanceOf(Practitioner::class, $practitioner);
         $this->assertContains('ROLE_PRACTITIONER', $practitioner->getRoles());
 
-        $this->languageTest($practitioner);
         $this->specialityTest($practitioner);
-        $this->localityTest($practitioner);
+        $this->locationTest($practitioner);
         $this->availableTest($practitioner);
         //$this->appointementTest($practitioner);
-    }
-
-    protected function languageTest(Practitioner $practitioner)
-    {
-        /** @var Language $language */
-        $language = $practitioner->getLanguages()->first();
-        $this->assertInstanceOf(Language::class, $language);
-        $this->assertEquals('fr', $language->getValue());
-
-        $practitioner->removeLanguage($language);
-        $this->assertEmpty($practitioner->getLanguages());
     }
 
     protected function specialityTest(Practitioner $practitioner)
@@ -82,14 +69,14 @@ class PractitionerTest extends KernelTestCase
         $this->assertEmpty($practitioner->getSpecialities());
     }
 
-    private function localityTest(Practitioner $practitioner)
+    private function locationTest(Practitioner $practitioner)
     {
-        /** @var Locality $locality */
-        $locality = $practitioner->getLocalities()->first();
-        $this->assertInstanceOf(Locality::class, $locality);
+        /** @var location $location */
+        $location = $practitioner->getLocations()->first();
+        $this->assertInstanceOf(location::class, $location);
 
-        $practitioner->removeLocality($locality);
-        $this->assertEmpty($practitioner->getLocalities());
+        $practitioner->removelocation($location);
+        $this->assertEmpty($practitioner->getLocations());
     }
 
     private function availableTest(Practitioner $practitioner)

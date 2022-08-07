@@ -28,7 +28,7 @@ class AvailabilityFixture extends Fixture implements DependentFixtureInterface
             $availability->setDay($fake->dateTimeBetween('now', '+1 month'));
             $availability->setHour($fake->dateTimeBetween('now', '+1 month'));
             $availability->setPractitioner($practitioner);
-            $availability->setLocality($practitioner->getLocalities()->first());
+            $availability->setLocation($practitioner->getLocations()->first());
 
             $this->setReference(Availability::class . '_' . $availability->getStatus(), $availability);
 
