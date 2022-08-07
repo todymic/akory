@@ -30,13 +30,7 @@ class Speciality
      */
     private Collection $practitioners;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Reason::class,
-     *     mappedBy="category",
-     *     orphanRemoval=true,
-     *     cascade={"persist", "remove"})
-     */
-    private Collection $reasons;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -49,7 +43,6 @@ class Speciality
     public function __construct()
     {
         $this->practitioners = new ArrayCollection();
-        $this->reasons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,42 +76,6 @@ class Speciality
     public function removePractitioner(Practitioner $practitioner): self
     {
         $this->practitioners->removeElement($practitioner);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Reason[]
-     */
-    public function getReasons(): Collection
-    {
-        return $this->reasons;
-    }
-
-    /**
-     * @return $this
-     */
-    public function addReason(Reason $reason): self
-    {
-        if (!$this->reasons->contains($reason)) {
-            $this->reasons[] = $reason;
-            $reason->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function removeReason(Reason $reason): self
-    {
-        if ($this->reasons->removeElement($reason)) {
-            // set the owning side to null (unless already changed)
-            if ($reason->getCategory() === $this) {
-                $reason->setCategory(null);
-            }
-        }
 
         return $this;
     }

@@ -45,8 +45,5 @@ class SpecialityTest extends KernelTestCase
 
         $this->assertInstanceOf(Speciality::class, $speciality);
         $this->assertEquals('Gynecologue', $speciality->getTitle());
-
-        $this->assertInstanceOf(Reason::class, $speciality->getReasons()->first());
-        $this->assertEquals('consultation', $speciality->getReasons()->first()->getConstant());
     }
 }

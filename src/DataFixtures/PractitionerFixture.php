@@ -33,10 +33,6 @@ class PractitionerFixture extends UserFixture implements DependentFixtureInterfa
 
         $partitionner->setDescription('Je suis professionnel');
 
-        $degree = new Degree();
-        $degree->setTitle('Diplome de Medecin');
-        $partitionner->addDegree($degree);
-
         /** @var Language $language */
         $language = $this->getReference(Language::class);
         $partitionner->addLanguage($language);
@@ -62,16 +58,6 @@ class PractitionerFixture extends UserFixture implements DependentFixtureInterfa
         $availability->setLocality($locality);
 
         $partitionner->addAvailability($availability);
-//
-//
-//        /** @var Patient $patient */
-//        $patient = $this->getReference(Patient::class);
-//        $appointement = new Appointment();
-//        $appointement->setStatus(Appointment::CONFIRMED_PRACTITIONER_STATUS);
-//        $appointement->setAvailability($availability);
-//        $appointement->setPatient($patient);
-//
-//        $partitionner->addAppointment($appointement);
 
         $manager->persist($partitionner);
 
@@ -84,7 +70,7 @@ class PractitionerFixture extends UserFixture implements DependentFixtureInterfa
     {
         return [
             LanguageFixture::class,
-            SpecialityFixture::class,
+            SpecialityFixture::class
         ];
     }
 }

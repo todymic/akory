@@ -53,7 +53,6 @@ class PractitionerTest extends KernelTestCase
         $this->assertInstanceOf(Practitioner::class, $practitioner);
         $this->assertContains('ROLE_PRACTITIONER', $practitioner->getRoles());
 
-        $this->degreeTest($practitioner);
         $this->languageTest($practitioner);
         $this->specialityTest($practitioner);
         $this->localityTest($practitioner);
@@ -70,17 +69,6 @@ class PractitionerTest extends KernelTestCase
 
         $practitioner->removeLanguage($language);
         $this->assertEmpty($practitioner->getLanguages());
-    }
-
-    protected function degreeTest(Practitioner $practitioner)
-    {
-        /** @var Degree $degree */
-        $degree = $practitioner->getDegrees()->first();
-        $this->assertInstanceOf(Degree::class, $degree);
-        $this->assertEquals('Diplome de Medecin', $degree->getTitle());
-
-        $practitioner->removeDegree($degree);
-        $this->assertEmpty($practitioner->getDegrees());
     }
 
     protected function specialityTest(Practitioner $practitioner)

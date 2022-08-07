@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  */
 class Locality
 {
-    /**
+    /** 
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")

@@ -73,14 +73,7 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
      */
     private Collection $localities;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Degree::class,
-     *     mappedBy="practitioner",
-     *     orphanRemoval=true,
-     *     cascade={"persist", "remove"}
-     *  )
-     */
-    private Collection $degrees;
+
 
     /**
      * Practitioner constructor.
@@ -93,7 +86,6 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
         $this->appointments = new ArrayCollection();
         $this->availabilities = new ArrayCollection();
         $this->localities = new ArrayCollection();
-        $this->degrees = new ArrayCollection();
     }
 
     public function getId(): int
@@ -281,42 +273,6 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
             // set the owning side to null (unless already changed)
             if ($locality->getPractitioner() === $this) {
                 $locality->setPractitioner(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getDegrees(): Collection
-    {
-        return $this->degrees;
-    }
-
-    /**
-     * @return $this
-     */
-    public function addDegree(Degree $degree): self
-    {
-        if (!$this->degrees->contains($degree)) {
-            $this->degrees[] = $degree;
-            $degree->setPractitioner($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function removeDegree(Degree $degree): self
-    {
-        if ($this->degrees->removeElement($degree)) {
-            // set the owning side to null (unless already changed)
-            if ($degree->getPractitioner() === $this) {
-                $degree->setPractitioner(null);
             }
         }
 

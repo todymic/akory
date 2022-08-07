@@ -36,13 +36,7 @@ class Appointment
     /**
      * @ORM\Column(type="string",
      *     length=255,
-     *     columnDefinition="ENUM(
-    'CONFIRMED_PRACTITIONER',
-    'WAITING_PRACTITIONER',
-    'CANCELLED_PRACTITIONER',
-    'MODIFIED_PRACTITIONER',
-    'CANCELLED_PATIENT'
-    )"
+     *     columnDefinition="ENUM('CONFIRMED_PRACTITIONER','WAITING_PRACTITIONER','CANCELLED_PRACTITIONER','MODIFIED_PRACTITIONER','CANCELLED_PATIENT')"
      * )
      */
     private string $status;
