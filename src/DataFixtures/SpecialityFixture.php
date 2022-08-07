@@ -13,6 +13,12 @@ class SpecialityFixture extends Fixture
     {
         $speciality = new Speciality();
         $speciality->setTitle('Gynecologue');
+
+        $reason = new Reason();
+        $reason->setDescription('consultation');
+        $reason->setConstant('consultation');
+        $speciality->addReason($reason);
+
         $manager->persist($speciality);
 
         $this->addReference(Speciality::class, $speciality);

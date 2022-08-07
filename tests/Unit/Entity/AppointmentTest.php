@@ -58,7 +58,7 @@ class AppointmentTest extends KernelTestCase
 
         $this->assertInstanceOf(Reason::class, $appointment->getReason());
         $this->assertEquals('consultation', $appointment->getReason()->getDescription());
-        $this->assertEquals(2, $appointment->getReason()->getId());
+        $this->assertEquals(3, $appointment->getReason()->getId());
 
         $this->assertEquals(Appointment::WAITING_PRACTITIONER_STATUS, $appointment->getStatus());
 
