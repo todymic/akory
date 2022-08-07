@@ -3,8 +3,13 @@
 {% block title %}Akory e!{% endblock %}
 
 {% block body %}
+    <div {{ stimulus_controller('say-hello') }}>
+        <input type="text" {{ stimulus_target('say-hello', 'name') }}>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-</div>
+        <button {{ stimulus_action('say-hello', 'greet') }}>
+            Greet
+        </button>
+
+        <div {{ stimulus_target('say-hello', 'output') }}></div>
+    </div>
 {% endblock %}
