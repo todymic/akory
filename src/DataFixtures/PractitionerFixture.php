@@ -30,9 +30,8 @@ class PractitionerFixture extends UserFixture implements DependentFixtureInterfa
 
         $partitionner->setDescription('Je suis professionnel');
 
-        /** @var Language $language */
-        $language = $this->getReference(Language::class);
-        $partitionner->addLanguage($language);
+
+        $partitionner->setLanguages(Practitioner::LANGUAGES);
 
         /** @var Speciality $speciality */
         $speciality = $this->getReference(Speciality::class);
@@ -67,7 +66,6 @@ class PractitionerFixture extends UserFixture implements DependentFixtureInterfa
     public function getDependencies(): array
     {
         return [
-            LanguageFixture::class,
             SpecialityFixture::class
         ];
     }

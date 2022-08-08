@@ -22,11 +22,8 @@ class Speciality
     private ?int $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Practitioner::class, inversedBy="specialities")
-     * @ORM\JoinTable(name="practitioners_specialities",
-     *      joinColumns={@ORM\JoinColumn(name="speciality_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="practitioner_id", referencedColumnName="id")}
-     * )
+     * @ORM\ManyToMany(targetEntity=Practitioner::class, mappedBy="specialities")
+     *
      */
     private Collection $practitioners;
 
@@ -57,35 +54,6 @@ class Speciality
         return $this->id;
     }
 
-    /**
-     * @return Collection|Practitioner[]
-     */
-    public function getPractitioners(): Collection
-    {
-        return $this->practitioners;
-    }
-
-    /**
-     * @return $this
-     */
-    public function addPractitioner(Practitioner $practitioner): self
-    {
-        if (!$this->practitioners->contains($practitioner)) {
-            $this->practitioners[] = $practitioner;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function removePractitioner(Practitioner $practitioner): self
-    {
-        $this->practitioners->removeElement($practitioner);
-
-        return $this;
-    }
 
     /**
      * @return Collection|Reason[]
@@ -134,6 +102,38 @@ class Speciality
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return Collection<int, Practitioner>
+     */
+    public function getPractitioners(): Collection
+    {
+        return $this->practitioners;
+    }
+
+    public function addPractitioner(Practitioner $practitioner): self
+    {
+        if (!$this->practitioners->contains($practitioner)) {
+            $this->practitioners->add($practitioner);
+            $practitioner->addSpeciality($this);
+        }
+
+        return $this;
+    }
+
+    public function removePractitioner(Practitioner $practitioner): self
+    {
+        if ($this->practitioners->removeElement($practitioner)) {
+            $practitioner->removeSpeciality($this);
+        }
 
         return $this;
     }

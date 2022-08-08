@@ -25,6 +25,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Practitioner extends User implements PasswordAuthenticatedUserInterface, UserInterface
 {
+    const LANGUAGES = ['fr','en','de','lu'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -32,16 +34,16 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
      */
     protected int $id;
     /**
-     * @ORM\ManyToMany(targetEntity=Language::class, inversedBy="practitioners")
-     * @ORM\JoinTable(name="practitioners_languages",
-     *      joinColumns={@ORM\JoinColumn(name="practitioner_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="language_id", referencedColumnName="id")}
-     *  )
+     * @ORM\Column(type="simple_array")
      */
-    private Collection $languages;
+    private array $languages;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Speciality::class, mappedBy="practitioners")
+     * @ORM\ManyToMany(targetEntity=Speciality::class, inversedBy="practitioners")
+     * @ORM\JoinTable(name="practitioners_specialities",
+     *      joinColumns={@ORM\JoinColumn(name="speciality_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="practitioner_id", referencedColumnName="id")}
+     * )
      */
     private Collection $specialities;
 
@@ -75,7 +77,6 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
     public function __construct()
     {
         $this->roles[] = 'ROLE_PRACTITIONER';
-        $this->languages = new ArrayCollection();
         $this->specialities = new ArrayCollection();
         $this->appointments = new ArrayCollection();
         $this->availabilities = new ArrayCollection();
@@ -87,68 +88,6 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
         return $this->id;
     }
 
-    /**
-     * @return Collection
-     */
-    public function getLanguages(): Collection
-    {
-        return $this->languages;
-    }
-
-    /**
-     * @return $this
-     */
-    public function addLanguage(Language $language): self
-    {
-        if (!$this->languages->contains($language)) {
-            $this->languages[] = $language;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function removeLanguage(Language $language): self
-    {
-        $this->languages->removeElement($language);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getSpecialities(): Collection
-    {
-        return $this->specialities;
-    }
-
-    /**
-     * @return $this
-     */
-    public function addSpeciality(Speciality $speciality): self
-    {
-        if (!$this->specialities->contains($speciality)) {
-            $this->specialities[] = $speciality;
-            $speciality->addPractitioner($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function removeSpeciality(Speciality $speciality): self
-    {
-        if ($this->specialities->removeElement($speciality)) {
-            $speciality->removePractitioner($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection
@@ -260,6 +199,42 @@ class Practitioner extends User implements PasswordAuthenticatedUserInterface, U
         if ($this->locations->removeElement($location)) {
             $location->removePractitioner($this);
         }
+
+        return $this;
+    }
+
+    public function getLanguages(): array
+    {
+        return $this->languages;
+    }
+
+    public function setLanguages(array $languages): self
+    {
+        $this->languages = $languages;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Speciality>
+     */
+    public function getSpecialities(): Collection
+    {
+        return $this->specialities;
+    }
+
+    public function addSpeciality(Speciality $speciality): self
+    {
+        if (!$this->specialities->contains($speciality)) {
+            $this->specialities->add($speciality);
+        }
+
+        return $this;
+    }
+
+    public function removeSpeciality(Speciality $speciality): self
+    {
+        $this->specialities->removeElement($speciality);
 
         return $this;
     }
