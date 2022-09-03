@@ -49,6 +49,12 @@ abstract class User implements PasswordAuthenticatedUserInterface, UserInterface
      */
     protected bool $isVerified = false;
 
+    /**
+     * @var string|null
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected ?string $avatar;
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -188,5 +194,25 @@ abstract class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->plainPassword = $plainPassword;
 
         return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+    public function getAvatarUrl(): ?string
+    {
+        if (!$this->avatar) {
+            return null;
+        }
+        if (str_contains($this->avatar, '/')) {
+            return $this->avatar;
+        }
+        return sprintf('/uploads/avatars/%s', $this->avatar);
+    }
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
     }
 }
